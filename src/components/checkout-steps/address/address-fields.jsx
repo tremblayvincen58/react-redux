@@ -1,0 +1,139 @@
+import React, { Component } from 'react';
+import { Field } from 'redux-form';
+import { FormattedMessage, injectIntl } from 'react-intl';
+
+import CountryField from './country-field';
+import FormField from '../shared/form-field';
+
+class AddressFields extends Component {
+
+  constructor(props) {
+    super(props);
+    this.handleCountryChange = this.handleCountryChange.bind(this);
+    this.state = {
+      stateList: {
+        states: [],
+        states_required: true
+      }
+    };
+  };
+
+  componentDidMount () {
+    this.setState({
+      stateList: {
+        states: this.props.statesFromOrder,
+        states_required: this.props.statesFromOrder.length > 0
+      }
+    })
+  };
+
+  handleCountryChange (countryId) {
+    this.props.fetchStatesForCountry(countryId).then((response) => {
+      this.setState({
+        stateList: response
+      });
+    });
+
+  };
+
+  render() {
+    let statesRequired = this.state.stateList.states_required;
+    let stateOptionsMarkup;
+
+    if (statesRequired) {
+      stateOptionsMarkup = this.state.stateList.states.map((state, idx) => {
+        return (
+          <option key={ idx } value={ state.id } >
+            { state.name }
+          </option>
+        );
+      });
+    }
+
+    return (
+      <div>
+        { this.props.children }
+        <Field className="form-control"
+                name={ this.props.fieldNamePrefix + "[firstname]" }
+                component={ FormField.inputFieldMarkup }
+                label={ this.props.intl.formatMessage({ id: 'field.addressForm.firstName', defaultMessage: "First Name" }) }
+                type="text" />
+
+        <Field className="form-control"
+                name={ this.props.fieldNamePrefix + "[lastname]" }
+                component={ FormField.inputFieldMarkup }
+                label={ this.props.intl.formatMessage({ id: 'field.addressForm.lastName', defaultMessage: "Last Name" }) }
+                type="text" />
+
+        <Field className="form-control"
+                name={ this.props.fieldNamePrefix + "[address1]" }
+                component={ FormField.inputFieldMarkup }
+                label={ this.props.intl.formatMessage({ id: 'field.addressForm.address1', defaultMessage: "Address Line 1" }) }
+                type="text" />
+
+        <Field className="form-control"
+                name={ this.props.fieldNamePrefix + "[address2]" }
+                component={ FormField.inputFieldMarkup }
+                label={ this.props.intl.formatMessage({ id: 'field.addressForm.address2', defaultMessage: "Address Line 2" }) }
+                type="text" />
+
+        <Field className="form-control"
+                name={ this.props.fieldNamePrefix + "[city]" }
+                component={ FormField.inputFieldMarkup }
+                label={ this.props.intl.formatMessage({ id: 'field.addressForm.city', defaultMessage: "City" }) }
+                type="text" />
+
+        <div className="checkout-form-row">
+          <label htmlFor="country" className="checkout-form-label">
+            <FormattedMessage
+              id="shared.models.country"
+              defaultMessage="Country"
+            />
+          </label>
+          <div className="checkout-form-fields">
+            <Field name={ this.props.fieldNamePrefix + "[country_id]" }
+                    fieldNamePrefix={ this.props.fieldNamePrefix }
+                    countries={ this.props.countries }
+                    component={ CountryField }
+                    handleCountryChange={ this.handleCountryChange }
+                    selectedCountryId={ this.props.selectedCountryId }/>
+          </div>
+        </div>
+
+        {
+          statesRequired &&
+          <div className="checkout-form-row">
+            <label htmlFor="state" className="checkout-form-label">
+              <FormattedMessage
+                id="shared.models.state"
+                defaultMessage="State"
+              />
+            </label>
+            <div className="checkout-form-fields">
+              <Field className="form-control"
+                      name={ this.props.fieldNamePrefix + "[state_id]" }
+                      component="select">
+                { stateOptionsMarkup }
+              </Field>
+            </div>
+          </div>
+        }
+
+        <Field className="form-control"
+                name={ this.props.fieldNamePrefix + "[zipcode]" }
+                component={ FormField.inputFieldMarkup }
+                label={ this.props.intl.formatMessage({ id: 'field.addressForm.zipCode', defaultMessage: "Zipcode" }) }
+                type="text" />
+
+        <Field className="form-control"
+                name={ this.props.fieldNamePrefix + "[phone]" }
+                component={ FormField.inputFieldMarkup }
+                label={ this.props.intl.formatMessage({ id: 'field.addressForm.phone', defaultMessage: "Phone" }) }
+                type="text" />
+
+      </div>
+    );
+  };
+};
+
+export default injectIntl(AddressFields);

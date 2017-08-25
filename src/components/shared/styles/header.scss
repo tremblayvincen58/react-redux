@@ -1,0 +1,84 @@
+.header {
+  height: 120px;
+  border-bottom: solid 1px #cacaca;
+
+  .headerLanguageBlock,
+  .headerTopNav {
+    padding-top: 20px;
+  }
+
+  .globalHeaderLogo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+  }
+
+  .headerNavHolder {
+    margin-bottom: 0;
+  }
+
+  .headerUserLink {
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+  }
+
+  .headerUserBlock {
+    margin-left: 20px;
+    display: inline-block;
+  }
+
+  .headerUserButton {
+    border: none;
+    padding: 0;
+    color: #000;
+
+    &:hover,
+    &:focus {
+      color: #4eaf79;
+      text-decoration: none;
+    }
+
+    &+ ul {
+      border: solid 1px #c7c7c7;
+      border-radius: 0;
+      top: 23px;
+
+      &:before {
+        content: '';
+        width: 10px;
+        height: 10px;
+        border: none;
+        border-top: solid 1px #c7c7c7;
+        border-left: solid 1px #c7c7c7;
+        position: absolute;
+        top: -6px;
+        left: 10px;
+        background: #fff;
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        transform: rotate(45deg);
+      }
+    }
+  }
+
+  .headerBottomNavRow {
+    margin-top: 10px;
+  }
+
+  .headerMainNavHolder {
+    padding-top: 10px;
+  }
+
+  @media (max-width: 767px) {
+    height: auto;
+
+    .globalHeaderLogo {
+      text-align: left;
+    }
+
+    .headerMobileMenu {
+      margin: 15px 0 0;
+      font-size: 18px;
+    }
+  }
+}
